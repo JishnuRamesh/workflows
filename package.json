@@ -1,0 +1,12 @@
+{
+  "name": "workflows",
+  "version": "0.0.1",
+  "description": "Workflow learning",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  },
+  "author": "Jishnu Ramesh",
+  "license": "ISC"
+}
