@@ -7,17 +7,51 @@ var compass = require('gulp-compass');
 var connect = require('gulp-connect');
 
 
-var coffeeSources = ['Components/coffee/*.coffee'];
+var env, 
+    coffeeSources, 
+    jsSources, 
+    sassSources,
+    htmlSources, 
+    jsonSources,
+    outputDir,
+    saasStyle;
 
-var jsSources = ['Components/scripts/rclick.js',
+
+
+ env = process.env.Node_ENV || 'development' ; 
+
+
+
+if (env === 'development'){
+    
+    outputDir = 'Build/Development/';
+    saasStyle = 'expanded'
+    
+}
+else {
+    
+    outputDir = 'Build/Production/';
+    saasStyle = 'compressed'
+}
+
+
+
+
+
+ coffeeSources = ['Components/coffee/*.coffee'];
+
+ jsSources = ['Components/scripts/rclick.js',
                   'Components/scripts/pixgrid.js',
                    'Components/scripts/tagline.js',
                  'Components/scripts/template.js'
                 ];
 
-var sassSources = ['Components/sass/style.scss'];
+ sassSources = ['Components/sass/style.scss'];
 
-var htmlSources = ['Build/Development/*.html'];
+ htmlSources = [outputDir + '*.html'];
+
+
+jsonSources = [outputDir + 'js/*.json'];
 
 
 gulp.task('coffee', function(){
@@ -39,7 +73,7 @@ gulp.task('js', function (){
     gulp.src(jsSources)
     .pipe(concat('script.js'))
     .pipe(browserify())
-    .pipe(gulp.dest('Build/Development/js'))
+    .pipe(gulp.dest(outputDir + 'js'))
     .pipe(connect.reload())
     
 });
@@ -53,12 +87,12 @@ gulp.task('compass', function() {
         .pipe(compass({
         
             sass : 'Components/sass',
-            image : 'Build/Development/images',
-            style : 'expanded'
+            image : outputDir +'images',
+            style : saasStyle
 
         })
         .on('error', gutil.log))
-        .pipe(gulp.dest('Build/Development/css'))
+        .pipe(gulp.dest( outputDir +'css'))
         .pipe(connect.reload())
     
     
@@ -72,7 +106,7 @@ gulp.task('watch', function(){
     gulp.watch(jsSources, ['js']);
     gulp.watch('Components/sass/*.scss', ['compass']);
     gulp.watch(htmlSources, ['html']);
-    gulp.watch('Build/Development/js/*.json', ['json']);
+    gulp.watch(jsonSources, ['json']);
     
     
 });
@@ -81,7 +115,7 @@ gulp.task('watch', function(){
 gulp.task('connect', function(){
     
     connect.server({
-        root : 'Build/Development',
+        root : outputDir,
         livereload : true
     });
     
@@ -99,7 +133,7 @@ gulp.task('html', function(){
 
 gulp.task('json', function(){
    
-    gulp.src('Build/Development/js/*.json')
+    gulp.src(jsonSources)
         .pipe(connect.reload());
     
 });
