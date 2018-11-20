@@ -58,3 +58,8 @@ gulp.task('compass', function() {
     
     
 })
+
+
+
+
+gulp.task('default', ['coffee', 'js', 'compass']);
