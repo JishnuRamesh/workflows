@@ -4,6 +4,6 @@ $ = require('jquery');
 
 (fill = function(item) {
   return $('.tagline').append(`${item}`);
-})('The most creative minds in XX');
+})('The most creative minds in Arts Now');
 
 fill;
