@@ -9,6 +9,7 @@ var gulpif = require('gulp-if');
 var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 var minifyHtml = require('gulp-minify-html');
+var jsonMinify = require('gulp-jsonminify');
 
 
 var env, 
@@ -114,7 +115,7 @@ gulp.task('watch', function(){
     gulp.watch(jsSources, ['js']);
     gulp.watch('Components/sass/*.scss', ['compass']);
     gulp.watch('Build/Development/*.html', ['html']);
-    gulp.watch(jsonSources, ['json']);
+    gulp.watch('Build/Development/js/*.json', ['json']);
     
     
 });
@@ -143,7 +144,9 @@ gulp.task('html', function(){
 
 gulp.task('json', function(){
    
-    gulp.src(jsonSources)
+    gulp.src('Build/Development/js/*.json')
+        .pipe(gulpif(env === 'production', jsonMinify()))
+        .pipe(gulpif(env === 'production', gulp.dest('Build/Production/js')))
         .pipe(connect.reload());
     
 });
