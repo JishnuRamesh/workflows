@@ -5,6 +5,9 @@ var concat = require('gulp-concat');
 var browserify = require('gulp-browserify');
 var compass = require('gulp-compass');
 var connect = require('gulp-connect');
+var gulpif = require('gulp-if');
+var babel = require('gulp-babel');
+var uglify = require('gulp-uglify');
 
 
 var env, 
@@ -25,13 +28,13 @@ var env,
 if (env === 'development'){
     
     outputDir = 'Build/Development/';
-    saasStyle = 'expanded'
+    saasStyle = 'expanded';
     
 }
 else {
     
     outputDir = 'Build/Production/';
-    saasStyle = 'compressed'
+    saasStyle = 'compressed';
 }
 
 
@@ -73,6 +76,10 @@ gulp.task('js', function (){
     gulp.src(jsSources)
     .pipe(concat('script.js'))
     .pipe(browserify())
+    .pipe(babel({
+        presets: ['es2015']
+    }))
+    .pipe(gulpif(env === 'production', uglify()))
     .pipe(gulp.dest(outputDir + 'js'))
     .pipe(connect.reload())
     
