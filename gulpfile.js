@@ -17,6 +17,8 @@ var jsSources = ['Components/scripts/rclick.js',
 
 var sassSources = ['Components/sass/style.scss'];
 
+var htmlSources = ['Build/Development/*.html'];
+
 
 gulp.task('coffee', function(){
 
@@ -69,6 +71,8 @@ gulp.task('watch', function(){
     gulp.watch(coffeeSources, ['coffee']);
     gulp.watch(jsSources, ['js']);
     gulp.watch('Components/sass/*.scss', ['compass']);
+    gulp.watch(htmlSources, ['html']);
+    gulp.watch('Build/Development/js/*.json', ['json']);
     
     
 });
@@ -84,4 +88,21 @@ gulp.task('connect', function(){
 });
 
 
-gulp.task('default', ['coffee', 'js', 'compass', 'connect', 'watch']);
+gulp.task('html', function(){
+    
+    gulp.src(htmlSources)
+    .pipe(connect.reload());
+    
+});
+
+
+
+gulp.task('json', function(){
+   
+    gulp.src('Build/Development/js/*.json')
+        .pipe(connect.reload());
+    
+});
+
+
+gulp.task('default', ['html', 'json', 'coffee', 'js', 'compass', 'connect', 'watch']);
