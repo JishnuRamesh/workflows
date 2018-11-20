@@ -60,6 +60,16 @@ gulp.task('compass', function() {
 })
 
 
+//watch for changes in files
+gulp.task('watch', function(){
+    
+    gulp.watch(coffeeSources, ['coffee']);
+    gulp.watch(jsSources, ['js']);
+    gulp.watch('Components/sass/*.scss', ['compass']);
+    
+    
+});
+
 
 
 gulp.task('default', ['coffee', 'js', 'compass']);
